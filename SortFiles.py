@@ -9,35 +9,37 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QFileDialog, QMessageBox
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+RESOURCES_DIR = os.path.join(BASE_DIR, 'data')
 
 class SortFiles(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'C:\SortFiles\data\sortfiles.ui', self)
+        uic.loadUi(os.path.join(RESOURCES_DIR, 'sortfiles.ui'), self)
 
-        self.setWindowIcon(QIcon(r'C:\SortFiles\data\logo.png'))
+        self.setWindowIcon(QIcon(os.path.join(RESOURCES_DIR, 'logo.png')))
 
-        self.paint_dir = QPixmap(r'C:\SortFiles\data\paint_dir.png')
+        self.paint_dir = QPixmap(os.path.join(RESOURCES_DIR, 'paint_dir.png'))
         self.label_p_dir = QLabel(self)
         self.label_p_dir.move(650, 370)
         self.label_p_dir.resize(self.paint_dir.width(), self.paint_dir.height())
         self.label_p_dir.setPixmap(self.paint_dir)
 
-        self.choose_start.setIcon(QIcon(r'C:\SortFiles\data\dir.png'))
+        self.choose_start.setIcon(QIcon(os.path.join(RESOURCES_DIR, 'dir.png')))
         self.choose_start.setIconSize(QSize(55, 58))
         self.choose_start.clicked.connect(self.get_start_direction)
 
-        self.choose_end.setIcon(QIcon(r'C:\SortFiles\data\dir.png'))
+        self.choose_end.setIcon(QIcon(os.path.join(RESOURCES_DIR, 'dir.png')))
         self.choose_end.setIconSize(QSize(55, 58))
         self.choose_end.clicked.connect(self.get_end_direction)
 
-        self.file = QPixmap(r'C:\SortFiles\data\extension.png')
+        self.file = QPixmap(os.path.join(RESOURCES_DIR, 'extension.png'))
         self.file_extension = QLabel(self)
         self.file_extension.move(380, 455)
         self.file_extension.resize(self.file.width(), self.file.height())
         self.file_extension.setPixmap(self.file)
 
-        self.arrow.setIcon(QIcon(r'C:\SortFiles\data\arrow.png'))
+        self.arrow.setIcon(QIcon(os.path.join(RESOURCES_DIR, 'arrow.png')))
         self.arrow.setIconSize(QSize(141, 41))
 
         self.start_button.clicked.connect(self.sort_event)
@@ -73,7 +75,7 @@ class SortFiles(QMainWindow):
 
         self.formats_choose = ['jpg', 'jpeg', 'png']
         self.color = 'Blue'
-        self.title.setIcon(QIcon(r'C:\SortFiles\data\sort_files.png'))
+        self.title.setIcon(QIcon(os.path.join(RESOURCES_DIR, 'sort_files.png')))
         self.title.setIconSize(QSize(481, 131))
 
         self.types = [self.type_1, self.type_2, self.type_3, self.type_4, self.type_5, self.type_6,
@@ -196,7 +198,7 @@ class SortFiles(QMainWindow):
             path = self.start_dir.text()
             file_list = os.listdir(path)
             full_list = [os.path.join(path, i) for i in file_list if
-                         Path(path + i).suffix[1:] in self.formats_choose]
+                         Path(i).suffix[1:].lower() in [f.lower() for f in self.formats_choose]]
             if full_list:
                 for file in full_list:
                     clock = str(os.path.getmtime(file))
@@ -234,8 +236,8 @@ class SortFiles(QMainWindow):
 class About(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'C:\SortFiles\data\about.ui', self)
-        self.setWindowIcon(QIcon(r'C:\SortFiles\data\logo.png'))
+        uic.loadUi(os.path.join(RESOURCES_DIR, 'about.ui'), self)
+        self.setWindowIcon(QIcon(os.path.join(RESOURCES_DIR, 'logo.png')))
 
     def home(self):
         self.ex = SortFiles()
